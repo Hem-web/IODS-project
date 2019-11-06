@@ -4,4 +4,5 @@
 
 *Write a short description about the course and add a link to your GitHub repository here. This is an R Markdown (.Rmd) file so you can use R Markdown syntax.*
 
+My Feelings
 Right now i am feeling great becuase i have started something really new. I knew R exist and we could do lot of statistical analyses and data visulaization  with it, but working with R and github togther is very amazing. From this course i am expecting to expand my basics of R with some new techniques on data visulaization. I got the information about this course from my colleague.
