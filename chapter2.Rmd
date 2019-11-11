@@ -1,4 +1,40 @@
-# Insert chapter 2 title here
+# Regression and model validation
+Prior to regression and model validation, we looked deep into the data, understood it atributes and have worked with redefining name of some varibales and created a subset by seleccting variables of our interest for further analyses.  
+
+##Reading the data
+```{r}
+setwd("~/IODS-project")
+learning2014 <- read.table("~/IODS-project/data/learning2014.txt") 
+str(learning2014) 
+dim(learning2014) 
+```
+
+
+###Comment on structure and dimension of the data
+ + The data frame contains 7 variables with 166 observations where age and points are presented as integers and attitude, deep, stra and surf are presented as numbers. 
+ + Gender is presented with two factor levels, male (M) and female (F).
+
+##Exploring the data 
+```{r}
+pairs(learning2014[!names(learning2014) %in% c("gender")],col=learning2014$gender)
+```
+ 
+###Interpreting the data 
+  
+
+## Create a more advanced plot matrix with ggpairs()
+
+```{r}
+library(GGally)
+library(ggplot2)
+ggpairs(learning2014, 
+        mapping = aes(col = gender, alpha = 0.3), 
+        lower = list(combo = wrap("facethist", bins = 20)))
+```
+
+#Linear Regression
+
+
 
 *Describe the work you have done this week and summarize your learning.*
 
