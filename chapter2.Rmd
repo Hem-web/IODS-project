@@ -40,14 +40,45 @@ ggpairs(learning2014,
 qplot(attitude, points, data = learning2014) + geom_smooth(method = "lm")
 ```
 
-Running the regression model for  with three independent variables, ***attitude***, ***surf***, and ***deep*** to identify the strongest impact of them on ***points***.
+Running the regression model with all five independent variables, ***attitude***, ***surf***, ***stra***, ***age***, and ***deep*** to identify the strongest impact of them on ***points***.
 ```{r}
-my_model <- lm(points ~ attitude + surf + deep, data = learning2014)
+my_model <- lm(points ~ attitude + surf + deep + stra + age, data = learning2014)
 results <- summary(my_model)
 
 knitr::kable(results$coefficients, digits=3, caption="Regression coefficients")
 ```
 
+After running the model with five explanatory variables, we observed that the strongest effect on score ***points*** was due to attitude towards statistics. Nevertheless, let's remove  ***stra***, ***age***, and ***deep*** and run the model again to see if including ***surf*** in the model makes any changes.
+
+```{r}
+my_model1 <- lm(points ~ attitude + surf, data = learning2014)
+results <- summary(my_model1)
+
+knitr::kable(results$coefficients, digits=3, caption="Regression coefficients")
+```
+
+It seems that even after removing those three variables, the statistical paramters of surface learning appproach did not changed and remained statistical insignificant suggesting that attitude is only the explanatory variable that impacted the points mostly. So, let's run the model again with only ***attitude*** as an explanatory variable.
+
+```{r}
+my_model3 <- lm(points ~ attitude, data = learning2014)
+results <- summary(my_model3)
+
+knitr::kable(results$coefficients, digits=3, caption="Regression coefficients")
+```
+
+The final model summay suggest that as intercept and attitude are statistically singnificant. The attitude estimate 3.525 means that in every 1 level increase of attiutde the point score will be increased by 3.525 whereas intercept of 11.637 means that people with zero attitude can still get 11.637 points. The Coefficient of determination $R^2$ = `r results$r.squared` indicates that  contribution of attitude towards scoring point is only 19%. This suggest that there must be other explanatory variables which could influence the ***points***.
+
+### Diagnostic plots
+```{r}
+plot(my_model3, which=c(1,2,5))
+```
+
+ + Linear regression model is based on mainly two assumption, first, the linearity of the target variable is assumed to be linear and second, errors in the model are normally distributed with no correlation, contant variance and independent of expalanotry variables. 
+ + Based on QQ plots we can say the our errors are close to normally distributed as dots falls
+ closer to the line of fit.
+ + The uniform distribution of residuals vs model prediction, suggest that error size is constant and there is no effect of explanotry variable on it.
+ + The Residual vs leverage plot assist in identifying the extreme outliers in the explanotry variables. Any sort of trend on that plot will point towards an outlier. Since we do not see such trend in Residual vs leverage plot we can say that there was a regular leverage in out model.
+ + As our model was well fitted with the assumptions, we can conclude that  our model is valid.
 
 
 
