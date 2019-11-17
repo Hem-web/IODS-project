@@ -14,7 +14,15 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 setwd("~/IODS-project")
 alc <- read.table("~/IODS-project/data/alc.txt") 
-str(alc) 
+colnames(alc) 
 ```
-
-
+### Explanation of the data
+ + 
+ +
+ 
+## Developing hypothesis based on selected variables
+## Exploring the distribution of selected variables and their relationships with alcohol consumption
+## Performing regression analyses on selected variables and alcohol consumption
+## Explorig the predictive power of the model
+## Cross-validation of the model
+## 
