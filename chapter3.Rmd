@@ -10,5 +10,11 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Logistic Regression
+## Reading the data
+```{r}
+setwd("~/IODS-project")
+alc <- read.table("~/IODS-project/data/alc.txt") 
+str(alc) 
+```
 
 
