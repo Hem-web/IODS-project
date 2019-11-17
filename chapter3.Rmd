@@ -14,13 +14,22 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 setwd("~/IODS-project")
 alc <- read.table("~/IODS-project/data/alc.txt") 
-colnames(alc) 
+names(alc) 
 ```
+
 ### Explanation of the data
  + 
  +
  
-## Developing hypothesis based on selected variables
+## Development of hypothesis based on selected variables
+   + There are many interesting variables in the data which could strongly link to the alcohol        consumption rate.However, I find followings varibales quite interesting and propose my personal hypothesis for each of them in reagrds with alcohol consumption. This selection was mainly based considering factors that could potential either encourage or discourage alcohol consumption. 
+     + ***acitivites***: Having enough extra-circular activites could discourage alcohol consumption beacuse it will assist to increase the level of refreshment.
+     + ***freetime***: More freetime after school could discourage alcohol consumption becuase it will assist on easing the stress that have likely accumulated during shool hours.
+     + ***studytime***: More study hours demands more focus. This will likely induce the feelings of having an extra mode of refreshment, therefore could encourage alcohol consumption   
+     + ***failures***: Most of the time failures are catalyst of bad behaviour or frustrations just becuase they bring more stress to our daily life. Eventually, it could encourage alcohol consumption.
+    
+     
+ 
 ## Exploring the distribution of selected variables and their relationships with alcohol consumption
 ## Performing regression analyses on selected variables and alcohol consumption
 ## Explorig the predictive power of the model

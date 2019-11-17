@@ -190,7 +190,7 @@ summary {
 <h2>Reading the data</h2>
 <pre class="r"><code>setwd(&quot;~/IODS-project&quot;)
 alc &lt;- read.table(&quot;~/IODS-project/data/alc.txt&quot;) 
-colnames(alc) </code></pre>
+names(alc) </code></pre>
 <pre><code>##  [1] &quot;school&quot;     &quot;sex&quot;        &quot;age&quot;        &quot;address&quot;    &quot;famsize&quot;   
 ##  [6] &quot;Pstatus&quot;    &quot;Medu&quot;       &quot;Fedu&quot;       &quot;Mjob&quot;       &quot;Fjob&quot;      
 ## [11] &quot;reason&quot;     &quot;nursery&quot;    &quot;internet&quot;   &quot;guardian&quot;   &quot;traveltime&quot;
@@ -206,8 +206,18 @@ colnames(alc) </code></pre>
 </ul>
 </div>
 </div>
-<div id="developing-hypothesis-based-on-selected-variables" class="section level2">
-<h2>Developing hypothesis based on selected variables</h2>
+<div id="development-of-hypothesis-based-on-selected-variables" class="section level2">
+<h2>Development of hypothesis based on selected variables</h2>
+<ul>
+<li>There are many interesting variables in the data which could strongly link to the alcohol consumption rate.However, I find followings varibales quite interesting and propose my personal hypothesis for each of them in reagrds with alcohol consumption. This selection was mainly based considering factors that could potential either encourage or discourage alcohol consumption.
+<ul>
+<li><strong><em>acitivites</em></strong>: Having enough extra-circular activites could discourage alcohol consumption beacuse it will assist to increase the level of refreshment.</li>
+<li><strong><em>freetime</em></strong>: More freetime after school could discourage alcohol consumption becuase it will assist on easing the stress that have likely accumulated during shool hours.</li>
+<li><strong><em>studytime</em></strong>: More study hours demands more focus. This will likely induce the feelings of having an extra mode of refreshment, therefore could encourage alcohol consumption<br />
+</li>
+<li><strong><em>failures</em></strong>: Most of the time failures are catalyst of bad behaviour or frustrations just becuase they bring more stress to our daily life. Eventually, it could encourage alcohol consumption.</li>
+</ul></li>
+</ul>
 </div>
 <div id="exploring-the-distribution-of-selected-variables-and-their-relationships-with-alcohol-consumption" class="section level2">
 <h2>Exploring the distribution of selected variables and their relationships with alcohol consumption</h2>
