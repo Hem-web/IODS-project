@@ -6,11 +6,14 @@
 setwd("C:/Users/hemb/Documents/IODS-project/data")
 getwd()
 
-#3#reading the data
+
+##reading the data
 math<-read.table("student-mat.csv", sep = ";", header = TRUE)
 por<-read.table("student-por.csv", sep = ";", header = TRUE)
 
-#3#Looking into the data dimensions and strucutre
+
+#Looking into the data dimensions and strucutre
+
 dim(math)
 dim(por)
 str(math)
@@ -25,6 +28,7 @@ colnames(por)
 
 
 #installing package
+
 library(dplyr)
 
 #4# Joining two data sets:
@@ -41,7 +45,7 @@ dim(math_por)
 colnames(math_por)
 
 
-#5# Joining the duplicated answers by using if-else function
+## Joining the duplicated answers by using if-else function
 alc <- math_por %>% select(one_of(join_by))
 colnames(alc)
 
@@ -61,7 +65,7 @@ for(column_name in notjoined_columns) {
     alc[column_name] <- first_column}}
 
 
-#6# Data mutation
+## Data mutation
  library(ggplot2)
 
 # This function is creating a new column name "alc_use" by averaging daily and weekly alchol consumption
@@ -88,6 +92,7 @@ readtest
 write.table(alc,file="~/IODS-project/data/alc.txt")
 readtest1 <- read.table("~/IODS-project/data/alc.txt")
 readtest1
+
 
 
 
