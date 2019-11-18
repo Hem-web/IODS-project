@@ -13,17 +13,19 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Reading the data
 ```{r}
 setwd("~/IODS-project")
-alc <- read.table("~/IODS-project/data/alc.txt") 
+alc <- read.table("~/IODS-project/data/pormath.txt") 
 names(alc) 
+str(alc)
 ```
 
 ### Explanation of the data
- + 
- +
+ + The data have 282 observation and 35 variables. There are 17 variables with factoral level, one with numeric label,one with logical and rest with interger type.
+ 
  
 ## Development of hypothesis based on selected variables
-   + There are many interesting variables in the data which could strongly link to the alcohol        consumption rate.However, I find followings varibales quite interesting and propose my personal hypothesis for each of them in reagrds with alcohol consumption. This selection was mainly based considering factors that could potential either encourage or discourage alcohol consumption. 
-     + ***activities***: Having enough extra-circular activites could discourage alcohol consumption beacuse it will assist to increase the level of refreshment.
+   + There are many interesting variables in the data which could strongly link to the alcohol        consumption rate.However, I find followings varibales quite interesting and propose my personal hypothesis for each of them in reagrds with alcohol consumption. 
+   
+     + ***grades***: Having low grades already in the first period could encourage alcohol consumption becuase low grades generally perceieved as failure.
      + ***freetime***: More freetime after school could discourage alcohol consumption becuase it will assist on easing the stress that have likely accumulated during shool hours.
      + ***studytime***: More study hours demands more focus. This will likely induce the feelings of having an extra mode of refreshment, therefore could encourage alcohol consumption   
      + ***absences***:Absences may are results of stress related things, not keen on studying etc. Absences in school means that student spent their times also doing something else than just studying. Therefore, more absences in school could be a sign of spending time for drinking alcohol.
@@ -34,39 +36,74 @@ names(alc)
   + To explore the distribution of selected variables lets first install the following packages from library.
 ```{r}
 library(ggplot2)
-```
- + For graphical distribution I will use box plots of variables against the alcohol consumptions between male and female students. For that let's run following script
-```{r}
-g1 <- ggplot(alc, aes(x = high_use, y = activities, col = sex))
-g1 + geom_boxplot() + ylab("activities")
-g2 <- ggplot(alc, aes(x = high_use, y = freetime, col = sex))
-g2 + geom_boxplot() + ylab("freetime")
-g3 <- ggplot(alc, aes(x = high_use, y = studytime, col = sex))
-g3 + geom_boxplot() + ylab("studytime")
-g3 <- ggplot(alc, aes(x = high_use, y = absences, col = sex))
-g3 + geom_boxplot() + ylab("absences")
-```
- + Since the first box plot seems to not clear to understand, I will great the cross tabulation for clear understanding by using following script
-```{r}
 library(dplyr)
-table1<- alc %>% group_by(activities) %>% summarise(count = n(), mean_high_use = mean(high_use), min_high_use = min(high_use), max_high_use = max(high_use))
-table1
 ```
+ 
+```{r}
+#For graphical distribution I will use box plots of variables against the alcohol consumptions between male and female students. For that let's run following script
+g1 <- ggplot(alc, aes(x = high_use, y = G1))
+g1 + geom_boxplot() + ylab("G1")
+g2 <- ggplot(alc, aes(x = high_use, y = freetime))
+g2 + geom_boxplot() + ylab("freetime")
+g3 <- ggplot(alc, aes(x = high_use, y = studytime))
+g3 + geom_boxplot() + ylab("studytime")
+g3 <- ggplot(alc, aes(x = high_use, y = absences))
+g3 + geom_boxplot() + ylab("absences")
+
+```
+ 
+ + Students ***grades*** in first period seems to have an effect (perhaps minor) alcohol consumption as  box plots of  having (TRUE) or not having (FALSE) alcohol vary in length.
+ + There seeems no effect of having ***freetime*** after school in alcohol consumption as the box plot sizes for having (TRUE) or not having (FALSE) alcohol are same.  
+ + The ***studytime*** also seems to have an effect on alcohol consumption as  box plots of  having (TRUE) or not having (FALSE) alcohol vary in length.
+ + ***absences*** in school seems to have an higher variation on alchol consumption as there are many outliers above the whiskers. 
+ + My personal hyopthesis are pretty close to these results except the effect of ***freetime***. 
+ 
 
 ## Performing regression analyses on selected variables and alcohol consumption
 ```{r}
-m <- glm(high_use ~ activities + freetime + studytime, + absences, data = alc, family = "binomial")
-results <- summary(m)
-results
+m <- glm(high_use ~ G1 + freetime + studytime + absences, data = alc, family = "binomial")
+summary(m)
 coef(m)
 OR <- coef(m) %>% exp
-OR
 CI<-confint(m)
-CI
 cbind(OR, CI)
 ```
 
+ + Summary of the fitted model: Significance level of ***freetime***, ***studytime***, and ***absences*** suggest that they have a significant impact on alcohol consumption. . 
+ + Coefficients of the model as odds ratios: Looking into confidence interval, in majority of poulation (i.e 97.5 %) Grade scores, freetime and absences have affected the alcohol consumption.  
+ + Comparing to your previously stated hypothesis:
 
-## Explorig the predictive power of the model
-## Cross-validation of the model
-## 
+## Exploring the predictive power of the model
+```{r}
+# fit the model
+m <- glm(high_use ~ G1 + freetime + absences, data = alc, family = "binomial")
+
+# predict() the probability of high_use
+probabilities <- predict(m, type = "response")
+
+# add the predicted probabilities to 'alc'
+alc <- mutate(alc, probability = probabilities)
+
+# use the probabilities to make a prediction of high_use
+alc <- mutate(alc, prediction = high_use)
+# initialize a plot of 'high_use' versus 'probability' in 'alc'
+g <- ggplot(alc, aes(x = high_use, y = probability))
+
+# define the geom as points and draw the plot
+g + geom_point() 
+
+# tabulate the target variable versus the predictions
+table(high_use = alc$high_use, prediction = alc$prediction)
+
+# define a loss function (mean prediction error)
+loss_func <- function(class, prob) {
+  n_wrong <- abs(class - prob) > 0.5
+  mean(n_wrong)
+}
+
+# call loss_func to compute the average number of wrong predictions in the (training) data
+loss_func(class = alc$high_use, prob = 0)
+
+```
+
+
