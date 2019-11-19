@@ -1,0 +1,33 @@
+---
+title: "Chapter4"
+author: "Hem Raj Bhattarai"
+date: "19.11.2019"
+output: html_document
+---
+
+# Clustering and Classification
+ + In this chapter we are going to learn about methods that help us to identify the clusters (obersavtions or data that falls in one point or not homogenous) via clustering and classifying (giving names) and interpreting them based on their clusters structures or forms via classification method. 
++ ***K-means clustering*** is most typical technique used to identify clustered observations in the data. Also ***hierarchical clustering*** methods is quite popular, giving tree-like dendrograms as their main output.
++ Presence or absence of clusters in the data is easy to identify but knowing more e.g how many, giving names etc is not that easy.
++ Knowing more about clusters after identifying them is done by using different form of analysis e.g. ***discriminant analysis*** hich operates with the (now) known clusters, asking: "what makes the difference(s) between these groups (clusters)?"
++ Additionally, ***distance*** (or dissimilarity or similarity) approach on classifying clusters will be also discussed.
+
+
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
