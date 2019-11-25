@@ -13,7 +13,7 @@ output: html_document
 + Additionally, ***distance*** (or dissimilarity or similarity) approach on classifying clusters will be also discussed.
 updateR()
 
-## Reading the data
+### Reading the data
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 setwd("~/IODS-project")
 library(ggplot2)
@@ -43,7 +43,7 @@ cor_matrix<-cor(Boston)
 corrplot(cor_matrix, method="circle", order = "hclust", addrect = 2, col = terrain.colors(100), cl.ratio = 0.2, cl.align = "r")
 ```
 
-## Standarization of the data
+### Standarization of the data
  + During standarization of the data we scale the variables so that their mean changes to zero and standard deviation is converted to 1.
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 boston_scaled <- scale(Boston)
@@ -73,7 +73,7 @@ str(train)
 str(test)
 ```
 
-## LDA
+### LDA
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 lda.fit <- lda(crime ~ ., data = train)                 # linear discriminant analysis
@@ -99,7 +99,7 @@ dist_man <- dist(boston_scaled)
 summary(dist_man)
 ```
 
-## K-means clustering
+### K-means clustering
 ```{r}
 # k-means clustering
 km <-kmeans(Boston, centers = 4)
@@ -115,7 +115,7 @@ pairs(Boston, col = km$cluster)
 ```
 + A abrupt drop in  the total within-cluster sum of squares (WCSS) happneded when the number of clusters (x-axis) reached around 2 suggesting that optimum no of clusters is most likely 2 or less. No change in WCSS even after increasing the number of clusters upt 10 also suggest result produced using 2 or less number of cluster could be the similar.
 
-##BOnus
+### Bonus
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 data(Boston) # load the Boston data set
 boston_scaled1<- scale(Boston)# scale the Boston data set again - named boston_scaled1
@@ -142,7 +142,7 @@ lda.arrows(lda.fit_cluster, myscale = 2)
 ```
 
 
-##Super Bonus
+### Super Bonus
 ```{r echo=FALSE}
 model_predictors <- dplyr::select(train, -crime)
 # check the dimensions
