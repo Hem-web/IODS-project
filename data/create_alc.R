@@ -28,6 +28,7 @@ colnames(por)
 
 #4# Joining two data sets:
 library(dplyr)
+
 #Identifying the common columns in both data frame
 # Define own id for both datasets
 
@@ -44,14 +45,14 @@ pormath_free <- por_id %>% bind_rows(math_id) %>% select(one_of(free_cols))
 
 # Combine datasets to one long data
 pormath <- por_id %>% 
-  bind_rows(math_id) %>%
+  bind_rows(math_id) %>% # This function is adding the data of math just below the por_id data.
   # Aggregate data (more joining variables than in the example)  
   group_by(.dots=join_cols) %>%  
   # Calculating required variables from two obs  
   summarise(                                                           
     n=n(),
-    id.p=min(id),
-    id.m=max(id),
+    id.p=min(id),                       # id from portugese min becuase id starts with 1000
+    id.m=max(id),                       # id from math max becuase id starts with 2000
     failures=round(mean(failures)),     #  Rounded mean for numerical
     paid=first(paid),                   #    and first for chars
     absences=round(mean(absences)),
@@ -68,10 +69,10 @@ pormath <- por_id %>%
   inner_join(pormath_free,by=c("id.p"="id"),suffix=c("",".p")) %>%
   inner_join(pormath_free,by=c("id.m"="id"),suffix=c("",".m")) %>%
   # Calculate other required variables  
-  ungroup %>% mutate(
+  ungroup %>% mutate(           #ungroup is done just not to use the group that has been already identified in earlier script.
     alc_use = (Dalc + Walc) / 2,
     high_use = alc_use > 2,
-    cid=3000+row_number()
+    cid=3000+row_number()  #combined id number to check the original observation.
   )
 
 
