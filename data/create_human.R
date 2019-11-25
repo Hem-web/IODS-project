@@ -12,4 +12,4 @@ str(gii)
 summary(hd)
 summary(gii)
 
-#
+# Giving the new names to the colums 
