@@ -121,10 +121,12 @@ pairs(Boston, col = km$cluster)
 library(MASS)
 data(Boston) # load the Boston data set
 boston_scaled1<- scale(Boston)# scale the Boston data set again - named boston_scaled1
-km1<-kmeans(boston_scaled1, centers = 3)# k-means clustering
+boston_scaled2<-as.data.frame(boston_scaled1)
+km1 <-kmeans(Boston, centers = 3)# k-means clustering
+
 cluster <- km1$cluster
-boston_scaled1<- data.frame(boston_scaled1,cluster) # add the cluster number to the df
-lda.fit<- lda(cluster~., data = boston_scaled1)#linear discriminant analysis of clusters vs. all other variables
+boston_scaled2<- data.frame(boston_scaled1,cluster) # add the cluster number to the df
+lda.fit<- lda(cluster~., data = boston_scaled2)#linear discriminant analysis of clusters vs. all other variables
 lda.fit# print the lda.fit object
 
 # the function for lda biplot arrows
@@ -137,32 +139,11 @@ lda.arrows <- function(x, myscale = 1, arrow_heads = 0.1, color = "red", tex = 0
        cex = tex, col=color, pos=3)
 }
 
-classes1 <- as.numeric(boston_scaled1$cluster)# target classes as numeric
+classes1 <- as.numeric(boston_scaled2$cluster)# target classes as numeric
 
 plot(lda.fit, dimen = 2, col = classes1, pch = classes1, main = "LDA biplot using three clusters 1, 2 and 3")# plot the lda results
 lda.arrows(lda.fit, myscale = 2)
 ```
 
-
-### Super Bonus
-```{r echo=FALSE}
-model_predictors <- dplyr::select(train, -crime)
-# check the dimensions
-dim(model_predictors)
-dim(lda.fit$scaling)
-
-# matrix multiplication
-matrix_product <- as.matrix(model_predictors) %*% lda.fit$scaling
-matrix_product <- as.data.frame(matrix_product)
-
-#Next, install and access the plotly package. Create a 3D plot (Cool!) of the columns of the matrix product by typing the code below.
-library(plotly)
-pal <- c("red", "blue")
-plot1<-plot_ly(x = matrix_product$LD1, y = matrix_product$LD2, z = matrix_product$LD3, type= 'scatter3d', mode='markers')
-plot1
-
-
-
-```
 
 
