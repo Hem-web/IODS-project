@@ -76,6 +76,7 @@ str(test)
 ### LDA
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(MASS)
 lda.fit <- lda(crime ~ ., data = train)                 # linear discriminant analysis
 print(lda.fit)                                          # print the LDA fit  
 classes <- as.numeric(train$crime)
@@ -116,14 +117,15 @@ pairs(Boston, col = km$cluster)
 + A abrupt drop in  the total within-cluster sum of squares (WCSS) happneded when the number of clusters (x-axis) reached around 2 suggesting that optimum no of clusters is most likely 2 or less. No change in WCSS even after increasing the number of clusters upt 10 also suggest result produced using 2 or less number of cluster could be the similar.
 
 ### Bonus
-```{r echo=FALSE, message=FALSE, warning=FALSE}
+```{r, bonus, echo=TRUE, results='markdown', message=FALSE, warning=FALSE, fig.align="center"}
+library(MASS)
 data(Boston) # load the Boston data set
 boston_scaled1<- scale(Boston)# scale the Boston data set again - named boston_scaled1
 km1<-kmeans(boston_scaled1, centers = 3)# k-means clustering
 cluster <- km1$cluster
 boston_scaled1<- data.frame(boston_scaled1,cluster) # add the cluster number to the df
-lda.fit_cluster <- lda(cluster ~ ., data = boston_scaled1)#linear discriminant analysis of clusters vs. all other variables
-lda.fit_cluster# print the lda.fit object
+lda.fit<- lda(cluster~., data = boston_scaled1)#linear discriminant analysis of clusters vs. all other variables
+lda.fit# print the lda.fit object
 
 # the function for lda biplot arrows
 lda.arrows <- function(x, myscale = 1, arrow_heads = 0.1, color = "red", tex = 0.75, choices = c(1,2)){
@@ -137,8 +139,8 @@ lda.arrows <- function(x, myscale = 1, arrow_heads = 0.1, color = "red", tex = 0
 
 classes1 <- as.numeric(boston_scaled1$cluster)# target classes as numeric
 
-plot(lda.fit_cluster, dimen = 2, col = classes1, pch = classes1, main = "LDA biplot using three clusters 1, 2 and 3")# plot the lda results
-lda.arrows(lda.fit_cluster, myscale = 2)
+plot(lda.fit, dimen = 2, col = classes1, pch = classes1, main = "LDA biplot using three clusters 1, 2 and 3")# plot the lda results
+lda.arrows(lda.fit, myscale = 2)
 ```
 
 
@@ -158,6 +160,7 @@ library(plotly)
 pal <- c("red", "blue")
 plot1<-plot_ly(x = matrix_product$LD1, y = matrix_product$LD2, z = matrix_product$LD3, type= 'scatter3d', mode='markers')
 plot1
+
 
 
 ```
