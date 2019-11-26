@@ -30,7 +30,19 @@ names(gii)[3] <- "GII"
 names(gii)[4] <- "MMR"
 names(gii)[5] <- "ABR"
 names(gii)[6] <- "PRP"
-names(gii)[7] <- "PSE/F"
-names(gii)[8] <- "PSE/M"
-names(gii)[9] <- "LFPR/F"
-names(gii)[10] <- "LFPR/M"
+names(gii)[7] <- "PSE_F"
+names(gii)[8] <- "PSE_M"
+names(gii)[9] <- "LFPR_F"
+names(gii)[10] <- "LFPR_M"
+
+#Mutate the “Gender inequality” data and create two new variables. 
+#The first one should be the ratio of Female and Male populations with secondary education in each country. (i.e. edu2F / edu2M). 
+#The second new variable should be the ratio of labour force participation of females and males in each country (i.e. labF / labM)
+library(tidyverse)
+library(dplyr)
+gii1<-gii %>% mutate(edu2F/edu2M = (PSE_F)/(PSE_M), na.rm = TRUE, labF/labM = (LFPR_F)/(LFPR_M), na.rm = TRUE)
+
+# Joining the two data set
+human<- inner_join(hd, gii, by = "C")
+dim(human)
+str(human)
