@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Logistic Regression
+#chapter3:Logistic Regression
 ## Reading the data
 ```{r}
 setwd("~/IODS-project")

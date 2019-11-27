@@ -1,4 +1,4 @@
-# Regression and model validation
+#chapter2: Regression and model validation
  + This week course excersie will focus on Regression analyses and running the model for the data of our interest. 
  + Prior to regression and model validation, we looked deep into the data, understood it attributes and have worked with redefining name of some varibales and created a subset by seleccting variables of our interest for further analyses.  
 
