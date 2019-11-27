@@ -83,6 +83,8 @@ classes <- as.numeric(train$crime)
 plot(lda.fit, dimen = 2, col = classes, pch = classes) # ploting the LDA fit to have a firstlook
 lda.pred <- predict(lda.fit, newdata = test)          # predict classes with test data
 lda.pred$class
+
+
 ```
 
 ##Distance measurement
@@ -116,7 +118,7 @@ pairs(Boston, col = km$cluster)
 ```
 + A abrupt drop in  the total within-cluster sum of squares (WCSS) happneded when the number of clusters (x-axis) reached around 2 suggesting that optimum no of clusters is most likely 2 or less. No change in WCSS even after increasing the number of clusters upt 10 also suggest result produced using 2 or less number of cluster could be the similar.
 
-###Bonus
+##Bonus
 ```{r, bonus, echo=TRUE, results='markdown', message=FALSE, warning=FALSE, fig.align="center"}
 library(MASS)
 data(Boston) # load the Boston data set
@@ -144,6 +146,7 @@ classes1 <- as.numeric(boston_scaled2$cluster)# target classes as numeric
 plot(lda.fit, dimen = 2, col = classes1, pch = classes1, main = "LDA biplot using three clusters 1, 2 and 3")# plot the lda results
 lda.arrows(lda.fit, myscale = 2)
 ```
+
 
 
 
