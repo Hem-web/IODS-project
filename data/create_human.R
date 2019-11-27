@@ -11,38 +11,41 @@ str(hd)
 str(gii)
 summary(hd)
 summary(gii)
+colnames(hd)
+colnames(gii)
 
-# Giving the new names to the colums 
-library(tidyverse)
+
+# Read the required package 
+library(tidyr)
+library(dplyr)
+
+
 #changing the colnames of df data frame
-names(hd)[1] <- "HDIR"
-names(hd)[2] <- "C"
-names(hd)[3] <- "HDI"
-names(hd)[4] <- "LEB"
-names(hd)[5] <- "EYE"
-names(hd)[6] <- "MYE"
-names(hd)[7] <- "GNI"
-names(hd)[8] <- "GNI/HDI"
-#chnánging the colmun names of gii data frame
-names(gii)[1] <- "GIIR"
-names(gii)[2] <- "C"
-names(gii)[3] <- "GII"
-names(gii)[4] <- "MMR"
-names(gii)[5] <- "ABR"
-names(gii)[6] <- "PRP"
-names(gii)[7] <- "PSE_F"
-names(gii)[8] <- "PSE_M"
-names(gii)[9] <- "LFPR_F"
-names(gii)[10] <- "LFPR_M"
+colnames(hd) <- c("HDI.r", "country", "HDI", "life.expB", "expect.edu", "mean.edu", "GNI.capita", "GNIminusHDI")
+colnames(gii) <- c("GII.r", "country", "gender.ineq", "MMR", "adols.BR", "parlimanet.percent", "secedu.F", "secedu.M", "labour.particip.F", "labour.particip.M")
+colnames(hd)
+colnames(gii)
+
 
 #Mutate the “Gender inequality” data and create two new variables. 
 #The first one should be the ratio of Female and Male populations with secondary education in each country. (i.e. edu2F / edu2M). 
 #The second new variable should be the ratio of labour force participation of females and males in each country (i.e. labF / labM)
-library(tidyverse)
-library(dplyr)
-gii1<-gii %>% mutate(edu2F/edu2M = (PSE_F)/(PSE_M), na.rm = TRUE, labF/labM = (LFPR_F)/(LFPR_M), na.rm = TRUE)
+gii<- dplyr::mutate(gii, secedu.R = (secedu.F/secedu.M), labour.ratio = (labour.particip.F/labour.particip.M))
+colnames (gii)
+dim(gii)
+
 
 # Joining the two data set
-human<- inner_join(hd, gii, by = "C")
+human<- inner_join(hd, gii, by = "country")
 dim(human)
 str(human)
+
+#saving the data as a Table/text
+write.table(human,file="~/IODS-project/data/human.txt")
+human <- read.table("~/IODS-project/data/human.txt")
+
+#Reading the data again 
+str(human)
+head(human)
+dim(human)
+
