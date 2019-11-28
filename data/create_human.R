@@ -24,7 +24,7 @@ library(GGally)
 
 #changing the colnames of df data frame
 colnames(hd) <- c("HDI.r", "country", "HDI", "life.expB", "expect.edu", "mean.edu", "GNI.capita", "GNIminusHDI")
-colnames(gii) <- c("GII.r", "country", "gender.ineq", "MMR", "adols.BR", "parlimanet.percent", "secedu.F", "secedu.M", "labour.particip.F", "labour.particip.M")
+colnames(gii) <- c("GII.r", "country", "gender.ineq", "MMR", "adols.BR", "par.percent", "secedu.F", "secedu.M", "labour.particip.F", "labour.particip.M")
 colnames(hd)
 colnames(gii)
 
@@ -92,7 +92,7 @@ colnames(human)
 #Giving the row names as a countries name and deleting the country name coumn from the data.
 rownames(human) <- human$country # add countries as rownames
 human<- select(human, -country)
-human<-dplyr::select(human, secedu.R, labour.ratio,expect.edu,life.expB, GNI.capita, MMR, adols.BR, parlimanet.percent)
+human<-dplyr::select(human, secedu.R, labour.ratio,expect.edu,life.expB, GNI.capita, MMR, adols.BR, par.percent)
 dim(human)
 rownames(human)
 colnames(human)
