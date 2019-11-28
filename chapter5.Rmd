@@ -11,3 +11,26 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 #Chapter5:Dimensionality reduction techniques
+
+##Reading the data
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+setwd("~/IODS-project")
+human <- read.table("~/IODS-project/data/human.txt")
+str(human)
+head(human)
+dim(human)
+#Read the required packages
+library(MASS)
+library(knitr)
+library(kableExtra)
+library(dplyr)
+library(ggplot2)
+library(GGally)
+#Distribution and summary of the 
+ggpairs(human, 
+        lower=list(continuous=wrap("smooth", size = 1, colour="red")),
+        diag=list(continuous=wrap("barDiag", fill="blue")))
+
+summary(human)
+```
+ + The ***human*** data contains 155 obervations in 8 variables 
