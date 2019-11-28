@@ -18,6 +18,7 @@ colnames(gii)
 # Read the required package 
 library(tidyr)
 library(dplyr)
+library(GGally)
 
 
 
@@ -57,17 +58,49 @@ summary(human)
  ##This data contains 195 observations in 19 different variables. 
  ##HDI accounts long and healthy lives (life.exB), Knowledge (expect.edu and mean.edu), and a decent standard living (GNI.capita) as three dimesnions.
  ##GII accounts health (MMR and adols.BR), empowerment (secedu.F and secedu.M), and labor market (labour.particip.F and labour.particip.M)as three dimesnions.
- ##All above listed parameters (inside paraenthesis) under six different (three for HDI and 3 for GII) dimensions are shown for 6 european countries.
  ## In addition, the data also conatins, HDI itself, HDI and GII ratios, and also the newly formulated variables secedu.R (ratio of secedu2F tosecedu2M) and labour ratio (ratio of labour.particip.F to labour.particip.M)
 
 #Transforming GNI varibles
 library(stringr)
+human$GNI.capita
 str(human$GNI.capita) #looking into the GNI per capita (GNI.capita) column
-str_replace(human$GNI.capita, pattern=",", replace ="") %>% as.numeric  
+human$GNI.capita<-str_replace(human$GNI.capita, pattern=",", replace ="") %>% as.numeric()  
 str(human$GNI.capita)
 
 #Excluding unwanted variables (or selecting those what we will need) from human data and naming it with  "human1".
 human1<-dplyr::select(human, country, secedu.R,labour.ratio, expect.edu, life.expB, GNI.capita, MMR, adols.BR, parlimanet.percent) 
 str(human1)
 
-#
+#Removing all rows with missing values
+#In R, NA stands for not available, which means that the data point is missing. 
+  #If a variable you wish to analyse contains missing values, there are usually two main options:
+  #1.Remove the observations with missing values
+  #2.Replace the missing values with actual values using an imputation technique.
+
+complete.cases(human1) # finding the completeness of the data. This will identify the NA values in the data frame.
+data.frame(human1[-1], comp = complete.cases(human1)) # comp function is define to select only "TRUE" data
+human2 <- filter(human, complete.cases(human1)) #Here we filter the all The NA data and give the new name "human2". 
+complete.cases(human2) # All the data except last 7 row seems to be still "FALSE". So lets delete them.
+dim(human2)
+
+#Excluding the observation related to the regions.
+tail(human2) #with tail function we can see last 10 observations of the human data.
+last <- nrow(human2) - 7 # define the last indice which we want to keep
+human3 <- human2[1:last, ] # choose everything until the last 7 observations. So leave empty after comma
+
+#Giving the row names as a countries name and deleting the country name coumn from the data.
+rownames(human3) <- human3$country # add countries as rownames
+human<- select(human3, -country)
+dim(human)
+rownames(human)
+
+#saving the data as a Table/text
+write.table(human,file="~/IODS-project/data/human.txt")
+human <- read.table("~/IODS-project/data/human.txt")
+
+#Reading the data again 
+str(human)
+head(human)
+dim(human)
+summary(human)
+
