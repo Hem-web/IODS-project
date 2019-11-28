@@ -68,8 +68,8 @@ human$GNI.capita<-str_replace(human$GNI.capita, pattern=",", replace ="") %>% as
 str(human$GNI.capita)
 
 #Excluding unwanted variables (or selecting those what we will need) from human data and naming it with  "human1".
-human1<-dplyr::select(human, country, secedu.R,labour.ratio, expect.edu, life.expB, GNI.capita, MMR, adols.BR, parlimanet.percent) 
-str(human1)
+human<-dplyr::select(human, country, secedu.R,labour.ratio, expect.edu, life.expB, GNI.capita, MMR, adols.BR, parlimanet.percent) 
+str(human)
 
 #Removing all rows with missing values
 #In R, NA stands for not available, which means that the data point is missing. 
@@ -77,22 +77,25 @@ str(human1)
   #1.Remove the observations with missing values
   #2.Replace the missing values with actual values using an imputation technique.
 
-complete.cases(human1) # finding the completeness of the data. This will identify the NA values in the data frame.
-data.frame(human1[-1], comp = complete.cases(human1)) # comp function is define to select only "TRUE" data
-human2 <- filter(human, complete.cases(human1)) #Here we filter the all The NA data and give the new name "human2". 
-complete.cases(human2) # All the data except last 7 row seems to be still "FALSE". So lets delete them.
-dim(human2)
+complete.cases(human) # finding the completeness of the data. This will identify the NA values in the data frame.
+data.frame(human[-1], comp = complete.cases(human)) # comp function is define to select only "TRUE" data
+human <- filter(human, complete.cases(human)) #Here we filter the all The NA data and give the new name "human2". 
+complete.cases(human) # All the data except last 7 row seems to be still "FALSE". So lets delete them.
+dim(human)
 
 #Excluding the observation related to the regions.
-tail(human2) #with tail function we can see last 10 observations of the human data.
-last <- nrow(human2) - 7 # define the last indice which we want to keep
-human3 <- human2[1:last, ] # choose everything until the last 7 observations. So leave empty after comma
+tail(human) #with tail function we can see last 10 observations of the human data.
+last <- nrow(human) - 7 # define the last indice which we want to keep
+human <- human[1:last, ] # choose everything until the last 7 observations. So leave empty after comma
+colnames(human)
 
 #Giving the row names as a countries name and deleting the country name coumn from the data.
-rownames(human3) <- human3$country # add countries as rownames
-human<- select(human3, -country)
+rownames(human) <- human$country # add countries as rownames
+human<- select(human, -country)
+human<-dplyr::select(human, secedu.R, labour.ratio,expect.edu,life.expB, GNI.capita, MMR, adols.BR, parlimanet.percent)
 dim(human)
 rownames(human)
+colnames(human)
 
 #saving the data as a Table/text
 write.table(human,file="~/IODS-project/data/human.txt")
