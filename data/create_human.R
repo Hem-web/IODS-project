@@ -68,7 +68,7 @@ human$GNI.capita<-str_replace(human$GNI.capita, pattern=",", replace ="") %>% as
 str(human$GNI.capita)
 
 #Excluding unwanted variables (or selecting those what we will need) from human data and naming it with  "human1".
-human<-dplyr::select(human, country, secedu.R,labour.ratio, expect.edu, life.expB, GNI.capita, MMR, adols.BR, parlimanet.percent) 
+human<-dplyr::select(human, country, secedu.R,labour.ratio, expect.edu, life.expB, GNI.capita, MMR, adols.BR, par.percent) 
 str(human)
 
 #Removing all rows with missing values
@@ -91,7 +91,6 @@ colnames(human)
 
 #Giving the row names as a countries name and deleting the country name coumn from the data.
 rownames(human) <- human$country # add countries as rownames
-human<- select(human, -country)
 human<-dplyr::select(human, secedu.R, labour.ratio,expect.edu,life.expB, GNI.capita, MMR, adols.BR, par.percent)
 dim(human)
 rownames(human)
