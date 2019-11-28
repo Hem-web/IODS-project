@@ -26,11 +26,50 @@ library(kableExtra)
 library(dplyr)
 library(ggplot2)
 library(GGally)
-#Distribution and summary of the 
-ggpairs(human, 
-        lower=list(continuous=wrap("smooth", size = 1, colour="red")),
-        diag=list(continuous=wrap("barDiag", fill="blue")))
-
 summary(human)
 ```
+
+
+##Distribution of the data
+```{r Data at glance, echo=FALSE, message=FALSE, warning=FALSE}
+ggpairs(human, title = "Distribution of Human Development Indices",
+        lower=list(continuous=wrap("smooth", size = 0.5, colour="red", bins = 30)),
+        diag=list(continuous=wrap("barDiag", fill="blue", bins = 30)))
+```
+
  + The ***human*** data contains 155 obervations in 8 variables 
+
+##Principal Component Analysis on non-standarized data
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+human_pca<-prcomp(human)# perform principal component analysis (with the SVD method using prcomp)
+biplot(human_pca, choices = 1:2, col = c("grey40", "deeppink2")) # draw a biplot of the principal component representation and the original variables
+biplot(human_pca, choices = 1:2, col = c("grey40", "deeppink2", cex = c(0.8, 1)))
+
+```
+
+
+##Principal Component Analysis on standarized data
+```{r}
+human_std <- scale(human) # standardize the variables in human data set and save it under human_std
+summary(human_std) # print out summaries of the standardized variables
+pca_human <- prcomp(human_std) # perform principal component analysis (with the SVD method using prcomp)
+biplot(pca_human, choices = 1:2,col = c("grey40", "deeppink2", cex = c(0.8, 1)))# draw a biplot of the principal component representation and the original variables
+```
+ 
+##Creating a Biplot 
+```{r}
+#summary of the pca_human data
+s <- summary(pca_human)
+# proportion of variance captured by each PC
+pca_pr <- round(1*s$importance[2, ], digits = 5) 
+#Percentage (%) of variance captured by each PC's. By changing 1 to 100 in round command and 5 to 1 in digis command.
+pca_pr <- round(100*s$importance[2, ], digits = 1)
+print(pca_pr)
+#create object pc_lab to be used as axis labels
+pc_lab<-paste0(names(pca_pr), " (", pca_pr, "%)")
+
+# draw a biplot. Here, we lable the x and y axis by giving the pc_lab's first value as pc_lab[1] ans did same for y axis.
+biplot(pca_human, cex = c(0.8, 1), col = c("grey40", "deeppink2"), xlab = pc_lab[1], ylab = pc_lab[2])
+
+```
+
