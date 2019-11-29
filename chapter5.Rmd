@@ -10,9 +10,9 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-#Chapter5:Dimensionality reduction techniques
+# Chapter5:Dimensionality reduction techniques
 
-##Reading the data
+## Reading the data
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 setwd("~/IODS-project")
 human <- read.table("~/IODS-project/data/human.txt")
@@ -27,49 +27,104 @@ library(dplyr)
 library(ggplot2)
 library(GGally)
 summary(human)
+kable(summary(human))
 ```
 
 
-##Distribution of the data
-```{r Data at glance, echo=FALSE, message=FALSE, warning=FALSE}
+## Distribution of the data
+```{r fig.height=8, fig.width=10}
 ggpairs(human, title = "Distribution of Human Development Indices",
-        lower=list(continuous=wrap("smooth", size = 0.5, colour="red", bins = 30)),
-        diag=list(continuous=wrap("barDiag", fill="blue", bins = 30)))
+        lower=list(continuous=wrap("smooth", size = 0.5, colour="red")),
+        diag=list(continuous=wrap("barDiag", fill="blue", bins = 40)))
+
 ```
 
- + The ***human*** data contains 155 obervations in 8 variables 
 
-##Principal Component Analysis on non-standarized data
-```{r echo=FALSE, message=FALSE, warning=FALSE}
++ The ***human*** data contains 155 obervations in 8 variables 
+
+## Principal Component Analysis on non-standarized data
+```{r echo=FALSE, fig.height=6, fig.width=6, message=FALSE, warning=FALSE}
 human_pca<-prcomp(human)# perform principal component analysis (with the SVD method using prcomp)
 biplot(human_pca, choices = 1:2, col = c("grey40", "deeppink2")) # draw a biplot of the principal component representation and the original variables
-biplot(human_pca, choices = 1:2, col = c("grey40", "deeppink2", cex = c(0.8, 1)))
 
 ```
 
 
-##Principal Component Analysis on standarized data
-```{r}
+## Principal Component Analysis on standarized data: Way I
+```{r echo=FALSE, fig.height=6, fig.width=6, message=FALSE, warning=FALSE,fig.align="centre"}
 human_std <- scale(human) # standardize the variables in human data set and save it under human_std
 summary(human_std) # print out summaries of the standardized variables
 pca_human <- prcomp(human_std) # perform principal component analysis (with the SVD method using prcomp)
-biplot(pca_human, choices = 1:2,col = c("grey40", "deeppink2", cex = c(0.8, 1)))# draw a biplot of the principal component representation and the original variables
-```
- 
-##Creating a Biplot 
-```{r}
-#summary of the pca_human data
-s <- summary(pca_human)
-# proportion of variance captured by each PC
-pca_pr <- round(1*s$importance[2, ], digits = 5) 
-#Percentage (%) of variance captured by each PC's. By changing 1 to 100 in round command and 5 to 1 in digis command.
-pca_pr <- round(100*s$importance[2, ], digits = 1)
-print(pca_pr)
-#create object pc_lab to be used as axis labels
-pc_lab<-paste0(names(pca_pr), " (", pca_pr, "%)")
+s <- summary(pca_human)                          #summary of the pca_human data
+pca_pr <- round(1*s$importance[2, ], digits = 5) # proportion of variance captured by each PC
 
+pca_pr <- round(100*s$importance[2, ], digits = 1)#Percentage (%) of variance captured by each PC's. By changing 1 to 100 in round command and 5 to 1 in digis command.
+print(pca_pr)
+pc_lab<-paste0(names(pca_pr), " (", pca_pr, "%)") #create object pc_lab to be used as axis labels
+
+biplot(pca_human, choices = 1:2,col = c("grey40", "deeppink2", cex = c(0.8, 1)))# draw a biplot of the principal component representation and the original variables
 # draw a biplot. Here, we lable the x and y axis by giving the pc_lab's first value as pc_lab[1] ans did same for y axis.
 biplot(pca_human, cex = c(0.8, 1), col = c("grey40", "deeppink2"), xlab = pc_lab[1], ylab = pc_lab[2])
+```
+ 
+
+
+## Biplot on standarized data set-Way II
+```{r echo=FALSE, fig.height=6, fig.width=6, message=FALSE, warning=FALSE}
+pca_human <- prcomp(human_std, center = TRUE,scale. = TRUE)
+summary(pca_human)             #Here we can see the PC1-8 with SD and proportion of variance.
+library(devtools)
+install_github("vqv/ggbiplot") #A ggplot2 based biplot. It provides a drop-in replacement for biplot.princomp().
+library(ggbiplot)              #ggbiplot is only available for R3.6.1
+ggbiplot(pca_human)+ ggtitle("PCA on HDI with labels as dots") # Here we can see that biplot contains arrows representing the variables and dots as conutries. So lets label the dots with countries name.
+ggbiplot(pca_human, labels=rownames(human_std))+ ggtitle("PCA on HDI with labels as countries") #The labels with countries name is changed by giving command forlabes as rownames("data").
+ggbiplot(pca_human, labels=rownames(human_std), obs.scale = 1, var.scale = 1,)+ ggtitle("PCA on HDI with changed scale on observation and variance") #In this we changed the scale of observation and variables and also added the title.
+
+```
+
+
+## Multiple correspondance analysis (MCA)
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(FactoMineR)
+library(tidyr)
+data(tea)
+dim(tea)
+str(tea)
+```
+
+## Visulaization of the tea data
+
+```{r echo=FALSE, fig.height=6, fig.width=6, message=FALSE, warning=FALSE}
+#Let' select all the categorical varibles in the tea data except variable age in column 19 which is numerical
+tea1<-tea[, -19]
+#Lets again split this data into two subsets
+tea2<-tea1[, c(1:15)] #here i selected all the rows and columns from 1 to 15.
+tea3<-tea1[, c(16:30)] #here i selected all the rows and columns from 16 to 30.
+#We visulaized the tea data. In the script we added title, and filled the bars with fill command having specific colour code. The mentioned color code giving the color to the edge of bars. Also created the theme for title, where specifically I change the title color to darked red.
+gather(tea2) %>% ggplot(aes(value)) + facet_wrap("key", scales = "free") + ggtitle("DATA on TEA") + geom_bar(fill="#E69F00",color="pink")+theme(plot.title = element_text(color = "darkred"))
+
+gather(tea3) %>% ggplot(aes(value)) + facet_wrap("key", scales = "free") + ggtitle("DATA on TEA") + geom_bar(fill="green",color="pink")+theme(plot.title = element_text(color = "red"))
+
+ 
+```
+
+## MCA of the tea data (full dataset)
+```{r echo=FALSE, fig.height=6, fig.width=6, message=FALSE, warning=FALSE}
+data(tea)
+mca <- MCA(tea, quanti.sup = 19, quali.sup=20:36) #Do multiple correspondence analysis with the function MCA() on full data tea. Here, I specified the data on 19 variable is contnious data and from 20 to 36 as catergorical data.
+summary(mca) #look at the summary of the mca
+plot(mca, invisible=c("var", "quali.sup")) #plot the mca of tea data with active categories (var) and supplementary categories (quali.sup)
+plot(mca, invisible=c("ind", "quali.sup")) #plot with only active categories
+
+# Here I reduced the font size by giving cex command.Added the factors that contributed the most by giving the comman selectMod. And the result, ther eno label bu only points.Changed the color of less important varibales to dark grey to that tey are more visible. For e.g , it is helpful to use such graph during PP presentation.
+
+plot(mca, invisible=c("ind", "quali.sup"), cex=.8, selectMod = "contrib 20", unselect = "grey30") 
+plot(mca, invisible=c("quali.sup"), cex=.8, selectMod = "cos2 0.1", select = "contrib 10") #This is the method of selecting the indiviual that contribute the most and having the cos2 value greater tyhan 0.1 on the 2 dimensions (having quality of representation).
+plot(mca,choix="var", xlim = c(0, 0.5), ylim = c(0, 0.5), cex = 0.7) #In plot, red variables are the active, green are the supplementary variables and blue in continous varaible (i.e. age).
+mca <- MCA(tea, quanti.sup = 19, quali.sup=20:36, method="burt") #Performing the MSC via "Burt method". The perventage of variance of dimensions are usually greater if we use burt method.
+plot(mca, invisible=c("var", "quali.sup"), habillage = "frequency") #Assign the different color for individual variables using habillage command. Here we wanted to use the color for frequency (on drinking tea) variable.
+
+
 
 ```
 
