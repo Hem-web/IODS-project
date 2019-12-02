@@ -87,6 +87,7 @@ ggbiplot(pca_human, labels=rownames(human_std), obs.scale = 1, var.scale = 1,)+ 
 ```{r setup27, message=FALSE, warning=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 library(FactoMineR)
+library(factoextra)
 library(tidyr)
 data(tea)
 dim(tea)
@@ -112,12 +113,43 @@ gather(tea3) %>% ggplot(aes(value)) + facet_wrap("key", scales = "free") + ggtit
 knitr::opts_chunk$set(echo = FALSE)
 data(tea)
 mca <- MCA(tea, quanti.sup = 19, quali.sup=20:36) #Do MCA using function MCA() on full data tea.
+summary(mca)
+```
 
+4. **MCA result Interpretation**: 
+ * First of all it is important to know that MCA is mainly used for categorical variables as we have in tea dataset.
+ * However, continous variable can be used as a background variable.
+ * The summary of mca showed decending order of variance % explained (as Eigenvalues) by each dimensions. For e.g Dim1 has explained close to 10 % of variance while Dim27 explained only 1% of variance.
+ * Following that, summary result showed the contribution (**ctr**) of each indivial on producing dimensions. And we can say that Dim1 and Dim2 are mainly influenced by individual 6 and 10 respectively. 
+ * On the other hand **cos2** represent the quality of individual on dimensions. If **cos2** is closer to 1 then we can say that individual is well projected to the dimensions and in our case individual 4 and 10 are well representing the Dim1 and Dim2 respectively.
+ * MCA has shown the significance of active categorical variables with respect to zero as a V-test. If v-test is between -2 to 2 then categories as coordinate in not significantly different than zero, if v-test is >2 if categories is significantly greater than zero and is < -2 if categories is significantly less than zero. From this, we can say that for Dim1 breakfast ,tea time,evening, lunch, and Not.dinner categories are greater than zero. Whereas, same hold true with Not.breakfast, Not.lunch and dinner Dim2.
+ * Following that, MCA has also given the influence of each categorical variable sin dimensions as **(eta2)**, which is similar of ANOVA test. The value close to 1 suggest that there is strong link between dimensions and categorical variables. So we can say that tearoom, tea.time and fiends are strongly linked with Dim1. In contrast there is no such strong relationship between the varaibles and Dim2. 
+ * There are also result for supplementary categories similar to categorical categories However they do not contribute to the construction of dimensions.
+ * Lastly,  MCA has give the continious variable of the dataset and its relationship with the dimensions.
+
+
+## Exploring various MCA plotting options
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 # Here I reduced the font size by giving cex command.Added the factors that contributed the most by giving the comman selectMod. And the result, ther eno label bu only points.Changed the color of less important varibales to dark grey to that tey are more visible. For e.g , it is helpful to use such graph during PP presentation.
 
 plot(mca, invisible=c("ind", "quali.sup"), cex=.8, selectMod = "contrib 20", unselect = "grey30") 
 plot(mca, invisible=c("quali.sup"), cex=.8, selectMod = "cos2 0.1", select = "contrib 10") 
-plot(mca,choix="var", xlim = c(0, 0.5), ylim = c(0, 0.5), cex = 0.7) 
 plot(mca, invisible=c("var", "quali.sup"), habillage = "frequency") #Different color for individual.
+
+#Here Lets creat a new subset from the tea data, perform the MCA and plot the biplot showing cos2 values as group.
+tea2<-tea1[, c(1:5)]
+mca1 <- MCA(tea2, graph = FALSE)
+fviz_mca_ind(mca1, col.ind = "cos2", 
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE, # Avoid text overlapping (slow if many points)
+             ggtheme = theme_minimal())
+
 ```
+
+5. Comment on MCA plots:
+ * In the first plot under this title, i have reduced the font sizes by adding cex command and also gave the command to plot the 20 most contributing individual to dimensions.Also i changed the color of less important variables to dark grey. 
+ * In second plot, I plotted the quality of individuals (cos2 greater than 0.1) on dimensions only for 10 most contributing variables as shown by dark blue color.
+ * In third biplot, different color is assigned for individual variables using habillage command. As a group I  used the color for frequency on drinking tea.
+ 
+ * Similar to second biplot, fourth biplot represent the individuals by their cos2 values.
 
