@@ -1,9 +1,9 @@
-#chapter2: Regression and model validation
+# chapter2: Regression and model validation
  + This week course excersie will focus on Regression analyses and running the model for the data of our interest. 
  + Prior to regression and model validation, we looked deep into the data, understood it attributes and have worked with redefining name of some varibales and created a subset by seleccting variables of our interest for further analyses.  
 
-##Reading the data
-```{r}
+## Reading the data
+```{r setup1}
 setwd("~/IODS-project")
 learning2014 <- read.table("~/IODS-project/data/learning2014.txt") 
 str(learning2014) 
@@ -11,17 +11,17 @@ dim(learning2014)
 ```
 
 
-###Comment on structure and dimension of the data
+### Comment on structure and dimension of the data
  + The data frame contains 7 variables with 166 observations where age and points are presented as integers and attitude, deep, stra and surf are presented as numbers. 
  + Gender is presented with two factor levels, male (M) and female (F).
 
-##Exploring the data 
-```{r}
+## Exploring the data 
+```{r setup2}
 pairs(learning2014[!names(learning2014) %in% c("gender")],col=learning2014$gender)
 ```
  
 
-```{r}
+```{r setup3}
 library(GGally)
 library(ggplot2)
 ggpairs(learning2014, 
@@ -29,19 +29,19 @@ ggpairs(learning2014,
         lower = list(combo = wrap("facethist", bins = 20)))
 ```
 
-###Interpreting the data 
+### Interpreting the data 
  + If we look at the main daiganol (skewed distribution) and first column (histograms), among all variables ***age*** of the gender is highly skewed whereas ***stra*** is skewed very minimal. 
  + High skeweness in age is also visible from box plots as it shows many outliers above whiskers (error bars). Minimal skweness in ***stra*** variable could be also seen in the box plot of ***stra*** where medians for both genders lies almost at the center of the box. 
  + Highest correlation is seen between ***attitude*** and ***points***; **Cor:** `r    cor(learning2014$attitude,learning2014$points)` .
  + Lowest correlation is seen between ***deep*** and ***surf***; **Cor:** `r    cor(learning2014$deep,learning2014$surf)` .
 
-##Linear Regression
-```{r}
+## Linear Regression
+```{r setup4}
 qplot(attitude, points, data = learning2014) + geom_smooth(method = "lm")
 ```
 
 Running the regression model with all five independent variables, ***attitude***, ***surf***, ***stra***, ***age***, and ***deep*** to identify the strongest impact of them on ***points***.
-```{r}
+```{r setup5}
 my_model <- lm(points ~ attitude + surf + deep + stra + age, data = learning2014)
 results <- summary(my_model)
 
@@ -50,7 +50,7 @@ knitr::kable(results$coefficients, digits=3, caption="Regression coefficients")
 
 After running the model with five explanatory variables, we observed that the strongest effect on score ***points*** was due to attitude towards statistics. Nevertheless, let's remove  ***stra***, ***age***, and ***deep*** and run the model again to see if including ***surf*** in the model makes any changes.
 
-```{r}
+```{r setup6}
 my_model1 <- lm(points ~ attitude + surf, data = learning2014)
 results <- summary(my_model1)
 
@@ -59,7 +59,7 @@ knitr::kable(results$coefficients, digits=3, caption="Regression coefficients")
 
 It seems that even after removing those three variables, the statistical paramters of surface learning appproach did not changed and remained statistical insignificant suggesting that attitude is only the explanatory variable that impacted the points mostly. So, let's run the model again with only ***attitude*** as an explanatory variable.
 
-```{r}
+```{r setup7}
 my_model3 <- lm(points ~ attitude, data = learning2014)
 results <- summary(my_model3)
 
@@ -68,10 +68,12 @@ knitr::kable(results$coefficients, digits=3, caption="Regression coefficients")
 
 The final model summay suggest that as intercept and attitude are statistically singnificant. The attitude estimate 3.525 means that in every 1 level increase of attiutde the point score will be increased by 3.525 whereas intercept of 11.637 means that people with zero attitude can still get 11.637 points. The Coefficient of determination $R^2$ = `r results$r.squared` indicates that  contribution of attitude towards scoring point is only 19%. This suggest that there must be other explanatory variables which could influence the ***points***.
 
-### Diagnostic plots
-```{r}
+## Diagnostic plots
+```{r setup8}
 plot(my_model3, which=c(1,2,5))
 ```
+
+1. Interpretation on Diagnostic plot
 
  + Linear regression model is based on mainly two assumption, first, the linearity of the target variable is assumed to be linear and second, errors in the model are normally distributed with no correlation, contant variance and independent of expalanotry variables. 
  + Based on QQ plots we can say the our errors are close to normally distributed as dots falls

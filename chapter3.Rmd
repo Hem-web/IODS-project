@@ -5,13 +5,10 @@ date: "13.11.2019"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
-#chapter3:Logistic Regression
+# chapter3:Logistic Regression
 ## Reading the data
-```{r}
+```{r setup9}
 setwd("~/IODS-project")
 alc <- read.table("~/IODS-project/data/pormath.txt") 
 names(alc) 
@@ -34,12 +31,12 @@ str(alc)
  
 ## Exploring the distribution of selected variables and their relationships with alcohol consumption
   + To explore the distribution of selected variables lets first install the following packages from library.
-```{r}
+```{r setup10}
 library(ggplot2)
 library(dplyr)
 ```
  
-```{r}
+```{r setup11}
 #For graphical distribution I will use box plots of variables against the alcohol consumptions between male and female students. For that let's run following script
 g1 <- ggplot(alc, aes(x = high_use, y = G1))
 g1 + geom_boxplot() + ylab("G1")
@@ -60,7 +57,7 @@ g3 + geom_boxplot() + ylab("absences")
  
 
 ## Performing regression analyses on selected variables and alcohol consumption
-```{r}
+```{r setup12}
 m <- glm(high_use ~ G1 + freetime + studytime + absences, data = alc, family = "binomial")
 summary(m)
 coef(m)
@@ -74,7 +71,7 @@ cbind(OR, CI)
  + Comparing to your previously stated hypothesis:
 
 ## Exploring the predictive power of the model
-```{r}
+```{r setup13}
 # fit the model
 m <- glm(high_use ~ G1 + freetime + absences, data = alc, family = "binomial")
 
