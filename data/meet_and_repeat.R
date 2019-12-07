@@ -54,3 +54,23 @@ glimpse(RATSL)
 # Brief summaries on variables:
 
 
+#saving the data as a Table/text
+write.table(BPRSL,file="~/IODS-project/data/BPRSL.txt")
+write.table(RATSL,file="~/IODS-project/data/RATSL.txt")
+
+BPRSL <- read.table("~/IODS-project/data/BPRSL.txt")
+RATSL <- read.table("~/IODS-project/data/RATSL.txt")
+
+
+#Reading the data again 
+dim(BPRSL)
+dim(RATSL)
+str(BPRSL)
+str(RATSL)
+head(BPRSL)
+head(RATSL)
+
+
+
+
+
