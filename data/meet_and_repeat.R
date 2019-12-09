@@ -24,7 +24,9 @@ summary(BPRS)
 summary(RATS)
 
 # About data and it's summary in brief:
-
+#1. RATS data: This data is about rats growth rate. It contains the rats body weight recorded weekly (upto 9 weeks) from three different groups of rats feding on different diets.
+#2. BPRS data: This data is about clinical trial where 40 male were randonmly assigned two different groups and and each subject was rated
+# as bried brief psychiatric rating scale (BPRS) measured before treatment began (week 0) and then at weekly intervals for eight weeks
 
 #Converting the categorical variables into factors
 BPRS$treatment <- factor(BPRS$treatment)
@@ -50,8 +52,11 @@ glimpse(BPRSL)
 glimpse(RATSL)
 
 #Understanding the necessity of long format compared to wide format 
-# Variable names, data contents and structures:
-# Brief summaries on variables:
+# It is important to transform the data from wide to long format while dealing with repeated measurement becuase it keeps the measurement in single variable
+# which is easier to manipulate, transform and validate.
+# Brief summaries on variables:After changing both data set from wide to long format we have merged the variables so that it will be easy to run to analyse them.
+#During this procedure, RATS data is constrained to two factors (ID and group) with one variable as "weight".
+#Whereas in BPRS data,it is the same with two factors (treatment and subejct) with one variable as "bprs" value.
 
 
 #saving the data as a Table/text
